@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.2.71'
+    id 'application'
+}
+
+group 'pl.angulski.kotlin'
+version '1.0.0'
+
+sourceCompatibility = 1.8
+
+mainClassName = 'pl.angulski.kotlin.xmlparser.ScriptKt'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Kotlin std lib
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8'
+
+    // Unit testing
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    // Logs: sfl4j allows us to replace different loggers later
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.22'
+
+    // Logs: logback - actual implementation of logger
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.8'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
